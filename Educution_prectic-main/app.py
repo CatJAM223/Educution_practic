@@ -1,0 +1,188 @@
+from flask import Flask, render_template, request, session, redirect, url_for
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///register.db'
+app.config['SECRET_KEY'] = 'childerGarden_KostromaS#@S'
+db = SQLAlchemy(app)
+
+
+class NameGroup(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text, nullable=False)
+    kids = db.relationship('Kids', backref='group', lazy=True)
+
+
+class Kids(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text, nullable=False)
+    age = db.Column(db.String(1), nullable=False)
+    name_mother = db.Column(db.Text)
+    name_father = db.Column(db.Text)
+    number_mother = db.Column(db.String(15))
+    number_father = db.Column(db.String(15))
+    group_id = db.Column(db.Integer, db.ForeignKey('name_group.id'), nullable=False)
+    attendance = db.relationship('Attendance', backref='name', lazy=True)
+
+
+class Admin(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    login = db.Column(db.String(40), nullable=False, unique=True)
+    password = db.Column(db.String(100), nullable=False)
+
+
+class Users(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    login = db.Column(db.String(40), nullable=False, unique=True)
+    password = db.Column(db.String(100), nullable=False)
+
+
+class News(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    news = db.Column(db.Text, nullable=False)
+
+
+class Attendance(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    kid = db.Column(db.Text, db.ForeignKey('kids.name'), nullable=False)
+    data = db.Column(db.Date, nullable=False)
+    attendance = db.Column(db.Boolean, nullable=False)
+
+
+with app.app_context():
+    db.create_all()
+    existing_admin = Admin.query.filter_by(login='admin').first()
+    if not existing_admin:
+        admin = Admin(
+            login='admin',
+            password=generate_password_hash('ChildernGarden_Kostroma')
+        )
+        db.session.add(admin)
+        db.session.commit()
+
+
+@app.route('/')
+def main():
+    return render_template('main.html')
+
+
+@app.route('/registration', methods=['GET', 'POST'])
+def registration():
+    if request.method == 'POST':
+        login = request.form.get('login')
+        password = request.form.get('password')
+
+        users = Users(
+            login=login,
+            password=generate_password_hash(password)
+        )
+
+        db.session.add(users)
+        db.session.commit()
+        return redirect(url_for('sing_in'))
+        
+    return render_template('registration.html')
+
+
+@app.route('/sing_in', methods=['GET', 'POST'])
+def sing_in():
+    if request.method == 'POST':
+        login = request.form.get('login')
+        password = request.form.get('password')
+        
+        user = Users.query.filter_by(login=login).first()
+        
+        if user and check_password_hash(user.password, password):
+            session['user_id'] = user.id
+            return redirect(url_for('main'))
+        else:
+            return "Неверный логин или пароль"
+            
+    return render_template('sing_in.html')
+
+
+@app.route('/groups')
+def groups():
+    groups = NameGroup.query.all()
+    return render_template('groups.html', groups=groups)
+
+
+@app.route('/teachers')
+def teachers():
+    return render_template('teacher.html')
+
+
+@app.route('/news')
+def news():
+    news_list = News.query.all()
+    return render_template('news.html', news_list=news_list)
+
+
+@app.route('/attendance')
+def attendance():
+    attendance_list = Attendance.query.all()
+    return render_template('attendance.html', attendance_list=attendance_list)
+
+
+@app.route('/admin/login', methods=['GET', 'POST'])
+def admin_login():
+    if request.method == 'POST':
+        login = request.form.get('login')
+        password = request.form.get('password')
+        
+        admin = Admin.query.filter_by(login=login).first()
+        
+        if admin and check_password_hash(admin.password, password):
+            session['admin_id'] = admin.id
+            return redirect(url_for('admin_dashboard'))
+        else:
+            return render_template('admin_login.html', error="Неверный логин или пароль")
+            
+    return render_template('admin_login.html')
+
+
+@app.route('/admin/dashboard')
+def admin_dashboard():
+    if 'admin_id' not in session:
+        return redirect(url_for('admin_login'))
+    
+    news_list = News.query.all()
+    return render_template('admin_dashboard.html', news_list=news_list)
+
+
+@app.route('/admin/add_news', methods=['POST'])
+def add_news():
+    if 'admin_id' not in session:
+        return redirect(url_for('admin_login'))
+    
+    news_text = request.form.get('news_text')
+    if news_text:
+        news = News(news=news_text)
+        db.session.add(news)
+        db.session.commit()
+    
+    return redirect(url_for('admin_dashboard'))
+
+
+@app.route('/admin/delete_news/<int:news_id>')
+def delete_news(news_id):
+    if 'admin_id' not in session:
+        return redirect(url_for('admin_login'))
+    
+    news = News.query.get(news_id)
+    if news:
+        db.session.delete(news)
+        db.session.commit()
+    
+    return redirect(url_for('admin_dashboard'))
+
+
+@app.route('/admin/logout')
+def admin_logout():
+    session.pop('admin_id', None)
+    return redirect(url_for('main'))
+
+
+if __name__ == '__main__':
+    app.run(debug=True)

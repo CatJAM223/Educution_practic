@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Новости - Совушка</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Совушка</div>
+            <div class="nav-links">
+                <a href="{{ url_for('main') }}">Главная</a>
+                <a href="{{ url_for('groups') }}">Группы</a>
+                <a href="{{ url_for('teachers') }}">Педагоги</a>
+                <a href="{{ url_for('news') }}">Новости</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="hero">
+        <h1>Как блестают наши звездочки!</h1>
+    </div>
+
+    <div class="cards-container">
+        {% for news_item in news_list %}
+        <div class="card">
+            <h3>Новость #{{ news_item.id }}</h3>
+            <p>{{ news_item.news }}</p>
+        </div>
+        {% endfor %}
+        
+        <!-- Статические новости для примера -->
+        <div class="card">
+            <h3>Новогодний утренник</h3>
+            <p>В прошлую субботу проводился ежегодный новогодний утренник. 
+            Дети пели песни, встретили Деда Мороза, загадали желания и получили долгожданные сладкие подарки.</p>
+        </div>
+    </div>
+</body>
+</html>

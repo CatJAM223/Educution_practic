@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Панель администратора - Совушка</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Совушка</div>
+            <div class="nav-links">
+                <a href="{{ url_for('main') }}">Главная</a>
+                <a href="{{ url_for('admin_dashboard') }}">Панель управления</a>
+                <a href="{{ url_for('admin_logout') }}">Выйти</a>
+            </div>
+        </nav>
+    </header>
+
+
+    <div class="container">
+        <div class="card">
+            <h3>Добавить новость</h3>
+            <form method="POST" action="{{ url_for('add_news') }}">
+                <div class="form-group">
+                    <label>Текст новости</label>
+                    <textarea name="news_text" rows="4" style="width: 100%; padding: 1rem; border: 2px solid #e9ecef; border-radius: 8px;" required></textarea>
+                </div>
+                <button type="submit" class="btn">Опубликовать новость</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h3>Управление новостями</h3>
+            {% for news_item in news_list %}
+            <div style="padding: 1rem; border-bottom: 1px solid #e9ecef;">
+                <p><strong>Новость #{{ news_item.id }}</strong></p>
+                <p>{{ news_item.news }}</p>
+                <a href="{{ url_for('delete_news', news_id=news_item.id) }}" 
+                   style="color: #e74c3c; text-decoration: none;"
+                   onclick="return confirm('Удалить эту новость?')">
+                    Удалить
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
