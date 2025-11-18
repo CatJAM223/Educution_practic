@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Детский сад Совушка</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Совушка</div>
+            <div class="nav-links">
+                <a href="{{ url_for('main') }}">Главная</a>
+                <a href="{{ url_for('groups') }}">Группы</a>
+                <a href="{{ url_for('teachers') }}">Педагоги</a>
+                <a href="{{ url_for('news') }}">Новости</a>
+                <a href="{{ url_for('registration') }}">Регистрация</a>
+                <a href="{{ url_for('sing_in') }}">Войти</a>
+                <a href="{{ url_for('admin_login') }}">Администратор</a>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Детский сад "Совушка" – как второй дом для ваших детей</h1>
+    </section>
+
+    <section class="features">
+        <div class="feature">
+            <h3>Комфортная атмосфера</h3>
+            <p>Создаем уютную обстановку для развития детей</p>
+        </div>
+        <div class="feature">
+            <h3>Самые лучшие воспитатели</h3>
+            <p>Профессиональные педагоги с большим опытом работы</p>
+        </div>
+        <div class="feature">
+            <h3>Качественное питание</h3>
+            <p>Питание, разработанное лучшими диетологами и педиатрами</p>
+        </div>
+        <div class="feature">
+            <h3>Развивающие программы</h3>
+            <p>Лучшие развивающие программы для ваших детей</p>
+        </div>
+    </section>
+
+    <footer style="background: #2c3e50; color: white; padding: 2rem; text-align: center;">
+        <div>
+            <h3>Организация</h3>
+            <p>ЧДОУ "Совушка"</p>
+        </div>
+        <div style="margin: 1rem 0;">
+            <h3>Адрес</h3>
+            <p>г. Кострома, ул. Ленина, дом 149</p>
+        </div>
+        <div>
+            <h3>Контакты</h3>
+            <p>+7 999 999 99 99</p>
+            <p>sovushka44@gmail.com</p>
+        </div>
+    </footer>
+</body>
+</html>
