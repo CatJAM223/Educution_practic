@@ -1,0 +1,124 @@
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body{
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f5f5;
+}
+
+/* Окно входа и регистрации */
+
+.title-login-in{
+    font-size: 40px;
+    color: #334975;
+    text-align: center;
+}
+
+.logo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+img{
+    width: 158px;
+    height: 158px;
+}
+
+.window-login-in{
+    background-color: #D9D9D9;
+    border-radius: 50px;
+    padding: 50px 40px;
+    gap: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    box-shadow: 0px 4px 5px 0px #00000025;
+    width: 600px;
+}
+
+.box-input{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    padding: 10px 20px;
+    flex-direction: column;
+}
+
+.input{
+    gap: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+input{
+    height: 80px;
+    width: 516px;
+    border-radius: 50px;
+    border: 3px solid #4668AA;
+    font-size: 20px;
+    color: #333;
+    padding-left: 20px;
+    background-color: #fff;
+    box-shadow: 0px 4px 5px 0px #00000025;
+    outline: none;
+}
+
+input::placeholder {
+    color: #ABABAB;
+}
+
+input:focus {
+    border-color: #334975;
+}
+
+button{
+    height: 80px;
+    width: 516px;
+    border-radius: 50px;
+    background-color: #4668AA;
+    color: white;
+    border: 3px solid #4668AA;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0px 4px 5px 0px #00000025;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #334975;
+}
+
+a {
+    color: #4668AA;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Стили для сообщений об ошибках */
+.error-message {
+    color: #e74c3c;
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 16px;
+    padding: 10px;
+    background-color: #ffeaea;
+    border-radius: 10px;
+    border: 1px solid #e74c3c;
+}

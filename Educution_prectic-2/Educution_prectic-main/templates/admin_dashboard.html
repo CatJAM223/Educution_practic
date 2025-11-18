@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель администратора - Совушка</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <ul class="navigation">
+                <img src="{{ url_for('static', filename='img/avatar.svg') }}" class="account">
+                <li class="nav-elem"><a href="{{ url_for('main') }}" style="color: inherit; text-decoration: none;">Главная</a></li>
+                <li class="nav-elem"><a href="{{ url_for('admin_dashboard') }}" style="color: inherit; text-decoration: none;">Панель управления</a></li>
+                <li class="nav-elem"><a href="{{ url_for('admin_logout') }}" style="color: inherit; text-decoration: none;">Выйти</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="title-list">
+                <img src="{{ url_for('static', filename='img/logo.webp') }}" class="logo">
+                <h1 class="title">Панель администратора</h1>
+            </div>
+
+            <div class="main-home">
+                <div class="block-menu">
+                    <ul class="menu">
+                        <h1 class="subtitle">УПРАВЛЕНИЕ</h1>
+                        <hr color="#334975" size="3px">
+                        <li class="menu-elem">Добавление новостей</li>
+                        <li class="menu-elem">Управление новостями</li>
+                    </ul>
+                </div>
+
+                <div class="main-info">
+                    <h1 class="title">Добавить новость</h1>
+                    <hr color="#334975" size="3px">
+                    <form method="POST" action="{{ url_for('add_news') }}" style="display: flex; flex-direction: column; gap: 15px;">
+                        <textarea name="news_text" rows="4" placeholder="Введите текст новости..." style="width: 100%; padding: 1rem; border: 2px solid #4668AA; border-radius: 20px; font-size: 16px; resize: vertical;" required></textarea>
+                        <button type="submit" style="height: 50px; border-radius: 25px; background-color: #4668AA; color: white; border: none; font-size: 18px; cursor: pointer;">Опубликовать новость</button>
+                    </form>
+
+                    <div style="margin-top: 30px;">
+                        <h2 class="subtitle">Существующие новости</h2>
+                        <hr color="#334975" size="2px">
+                        {% for news_item in news_list %}
+                        <div style="padding: 1rem; border-bottom: 1px solid #e9ecef;">
+                            <p><strong>Новость #{{ news_item.id }}</strong></p>
+                            <p>{{ news_item.news }}</p>
+                            <a href="{{ url_for('delete_news', news_id=news_item.id) }}" 
+                               style="color: #e74c3c; text-decoration: none;"
+                               onclick="return confirm('Удалить эту новость?')">
+                                Удалить
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
