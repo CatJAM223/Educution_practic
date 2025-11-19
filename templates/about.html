@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контакты - Детский сад "Совушка"</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <ul class="navigation">
+                <div class="auth-status">
+                    {% if session.user_id %}
+                    <span class="status-authorized">Авторизован</span>
+                    <a href="{{ url_for('logout') }}" class="logout-link">Выйти</a>
+                    {% else %}
+                    <span class="status-guest">Гость</span>
+                    {% endif %}
+                </div>
+                <li class="nav-elem"><a href="{{ url_for('main') }}" style="color: inherit; text-decoration: none;">Главная</a></li>
+                <li class="nav-elem"><a href="{{ url_for('news') }}" style="color: inherit; text-decoration: none;">Мероприятия</a></li>
+                <li class="nav-elem"><a href="{{ url_for('groups') }}" style="color: inherit; text-decoration: none;">Группы</a></li>
+                {% if not session.user_id %}
+                <li class="nav-elem"><a href="{{ url_for('sing_in') }}" style="color: inherit; text-decoration: none;">Войти</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="title-list">
+                <img src="{{ url_for('static', filename='img/logo.webp') }}" class="logo">
+                <h1 class="title">Контакты</h1>
+            </div>
+
+            <div class="cards-container">
+                <div class="card">
+                    <h3>Директор</h3>
+                    <p>Иванова Мария Петровна</p>
+                    <p>+7 (999) 999-99-99</p>
+                    <p>Часы приема: Пн-Пт 9:00-18:00</p>
+                </div>
+
+                <div class="card">
+                    <h3>Старший воспитатель</h3>
+                    <p>Петрова Анна Сергеевна</p>
+                    <p>+7 (999) 999-99-99</p>
+                    <p>Часы приема: Пн-Пт 10:00-17:00</p>
+                </div>
+
+                <div class="card">
+                    <h3>Приемная комиссия</h3>
+                    <p>Сидорова Ольга Владимировна</p>
+                    <p>+7 (999) 999-99-99</p>
+                    <p>Часы работы: Пн-Пт 8:00-19:00</p>
+                </div>
+
+                <div class="card">
+                    <h3>Бухгалтерия</h3>
+                    <p>Кузнецова Елена Александровна</p>
+                    <p>+7 (999) 456-78-90</p>
+                    <p>Часы работы: Пн-Пт 9:00-17:00</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="block-contact-info">
+                <img src="{{ url_for('static', filename='img/logo.webp') }}" class="logo">
+                <div class="block-contact"> 
+                    <h1 class="subtitle">Организация</h1>
+                    <p class="text">ЧДОУ "Совушка"</p>
+                </div>
+                <div class="block-contact"> 
+                    <h1 class="subtitle">Адрес</h1>
+                    <p class="text">г. Кострома, ул. Ленина, дом 56</p>
+                </div>
+                <div class="block-contact"> 
+                    <h1 class="subtitle">Контакты</h1>
+                    <p class="text">+7 (999) 999-99-99</p>
+                    <p class="text">sovushka44@gmail.com</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

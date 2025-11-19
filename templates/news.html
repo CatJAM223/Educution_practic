@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Новости - Совушка</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <ul class="navigation">
+                <div class="auth-status">
+                    {% if session.user_id %}
+                    <span class="status-authorized">Авторизован</span>
+                    <a href="{{ url_for('logout') }}" class="logout-link">Выйти</a>
+                    {% else %}
+                    <span class="status-guest">Гость</span>
+                    {% endif %}
+                </div>
+                <li class="nav-elem"><a href="{{ url_for('main') }}" style="color: inherit; text-decoration: none;">Главная</a></li>
+                <li class="nav-elem"><a href="{{ url_for('news') }}" style="color: inherit; text-decoration: none;">Мероприятия</a></li>
+                <li class="nav-elem"><a href="{{ url_for('groups') }}" style="color: inherit; text-decoration: none;">Группы</a></li>
+                <li class="nav-elem"><a href="{{ url_for('about') }}" style="color: inherit; text-decoration: none;">Контакты</a></li>
+                {% if not session.user_id %}
+                <li class="nav-elem"><a href="{{ url_for('sing_in') }}" style="color: inherit; text-decoration: none;">Войти</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="title-list">
+                <img src="{{ url_for('static', filename='img/logo.webp') }}" class="logo">
+                <h1 class="title">Как блестают наши звездочки!</h1>
+            </div>
+
+            <div class="news-container">
+                {% for news_item in news_list %}
+                <div class="news-card">
+                    <h3 class="news-title">{{ news_item.name_news }}</h3>
+                    <p class="news-text">{{ news_item.news }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="block-contact-info">
+                <img class="logo" src="{{ url_for('static', filename='img/logo.webp') }}">
+                <div class="block-contact"> 
+                    <h1 class="subtitle">Организация</h1>
+                    <p class="text">ЧДОУ "Совушка"</p>
+                </div>
+                <div class="block-contact"> 
+                    <h1 class="subtitle">Адрес</h1>
+                    <p class="text">г. Кострома, ул. Ленина, дом 56</p>
+                </div>
+                <div class="block-contact"> 
+                    <h1 class="subtitle">Контакты</h1>
+                    <p class="text">+7 (999) 999 99 99</p>
+                    <p class="text">sovushka44@gmail.com</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

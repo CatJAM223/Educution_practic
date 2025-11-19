@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Детский сад "Совушка"</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <ul class="navigation">
+                <div class="auth-status">
+                    {% if session.user_id %}
+                    <span class="status-authorized">Авторизован</span>
+                    <a href="{{ url_for('logout') }}" class="logout-link">Выйти</a>
+                    {% else %}
+                    <span class="status-guest">Гость</span>
+                    {% endif %}
+                </div>
+                <li class="nav-elem"><a href="{{ url_for('main') }}" style="color: inherit; text-decoration: none;">Главная</a></li>
+                <li class="nav-elem"><a href="{{ url_for('news') }}" style="color: inherit; text-decoration: none;">Мероприятия</a></li>
+                <li class="nav-elem"><a href="{{ url_for('groups') }}" style="color: inherit; text-decoration: none;">Группы</a></li>
+                {% if not session.user_id %}
+                <li class="nav-elem"><a href="{{ url_for('sing_in') }}" style="color: inherit; text-decoration: none;">Войти</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="title-list">
+                <img src="{{ url_for('static', filename='img/logo.webp') }}" class="logo">
+                <h1 class="title">О нашем детском саду "Совушка"</h1>
+            </div>
+
+            <div class="cards-container">
+                <div class="card">
+                    <h3>Устав детского сада</h3>
+                    <p>Наш детский сад работает согласно уставу, утвержденному учредителем. В документе прописаны основные цели и задачи учреждения, права и обязанности сотрудников, правила приема детей и организация образовательного процесса.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Образовательная программа</h3>
+                    <p>Основная образовательная программа "Радуга детства" разработана с учетом федеральных стандартов. Программа включает развивающие занятия, творческие мастерские, физическое воспитание и социальную адаптацию детей.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Режим дня</h3>
+                    <p>Ежедневный распорядок: 7:30-8:30 - прием детей, 8:30-9:00 - завтрак, 9:00-10:30 - развивающие занятия, 10:30-12:00 - прогулка, 12:30-13:00 - обед, 13:00-15:00 - тихий час, 15:30-16:30 - кружковая деятельность, 16:30-18:00 - игры и уход домой.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Правила посещения</h3>
+                    <p>Дети принимаются с 2 до 7 лет. Необходима медицинская карта и прививочный сертификат. Родители обязаны информировать воспитателя об отсутствии ребенка. В случае болезни более 3 дней требуется справка от педиатра.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Питание в детском саду</h3>
+                    <p>Организовано 5-разовое питание согласно утвержденному меню. Рацион сбалансирован, учитываются возрастные потребности и индивидуальные особенности детей (аллергии, пищевые ограничения). Ежедневно в меню свежие фрукты и овощи.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Безопасность и охрана</h3>
+                    <p>Территория детского сада охраняется круглосуточно. Установлена система видеонаблюдения. Проводятся регулярные учебные тренировки по эвакуации. Все сотрудники проходят инструктаж по технике безопасности.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Родительский комитет</h3>
+                    <p>В каждой группе выбирается родительский комитет, который участвует в организации праздников, экскурсий и улучшении условий пребывания детей. Заседания комитета проводятся ежемесячно.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Летний оздоровительный период</h3>
+                    <p>С июня по август реализуется программа летнего отдыха с усиленным пребыванием на свежем воздухе, закаливающими процедурами, тематическими неделями и творческими проектами.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="block-contact-info">
+                <img src="{{ url_for('static', filename='img/logo.webp') }}" class="logo">
+                <div class="block-contact"> 
+                    <h1 class="subtitle">Организация</h1>
+                    <p class="text">ЧДОУ "Совушка"</p>
+                </div>
+                <div class="block-contact"> 
+                    <h1 class="subtitle">Адрес</h1>
+                    <p class="text">г. Кострома, ул. Ленина, дом 56</p>
+                </div>
+                <div class="block-contact"> 
+                    <h1 class="subtitle">Контакты</h1>
+                    <p class="text">+7 (999) 999-99-99</p>
+                    <p class="text">sovushka44@gmail.com</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Журнал посещаемости - Совушка</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .journal-container {
+            margin: 20px 0;
+        }
+        .attendance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .attendance-table th,
+        .attendance-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        .attendance-table th {
+            background-color: #4668AA;
+            color: white;
+        }
+        .attendance-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .present {
+            color: green;
+            font-weight: bold;
+        }
+        .absent {
+            color: red;
+            font-weight: bold;
+        }
+        .add-attendance-form {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+        .delete-btn {
+            color: #e74c3c;
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid #e74c3c;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .delete-btn:hover {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .form-button {
+            padding: 10px 20px;
+            background-color: #4668AA;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .form-button:hover {
+            background-color: #3a5a8c;
+        }
+        .no-data {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <ul class="navigation">
+                <div class="auth-status">
+                    {% if session.admin_id %}
+                    <span class="status-authorized">Администрация</span>
+                    <a href="{{ url_for('admin_logout') }}" class="logout-link">Выйти</a>
+                    {% endif %}
+                </div>
+                <li class="nav-elem"><a href="{{ url_for('main') }}" style="color: inherit; text-decoration: none;">Главная</a></li>
+                <li class="nav-elem"><a href="{{ url_for('admin_dashboard') }}" style="color: inherit; text-decoration: none;">Панель управления</a></li>
+                <li class="nav-elem"><a href="{{ url_for('admin_journal') }}" style="color: inherit; text-decoration: none;">Журнал посещения</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="title-list">
+                <img src="{{ url_for('static', filename='img/logo.webp') }}" class="logo">
+                <h1 class="title">Журнал посещаемости</h1>
+            </div>
+
+            <div class="main-home">
+                <div class="block-menu">
+                    <ul class="menu">
+                        <h1 class="subtitle">УПРАВЛЕНИЕ</h1>
+                        <hr color="#334975" size="3px">
+                        <li class="menu-elem"><a href="{{ url_for('admin_dashboard') }}" style="color: inherit; text-decoration: none;">Добавление новостей</a></li>
+                        <li class="menu-elem"><a href="{{ url_for('admin_journal') }}" style="color: inherit; text-decoration: none;">Журнал посещаемости</a></li>
+                    </ul>
+                </div>
+
+                <div class="main-info">
+                    <!-- Форма добавления записи -->
+                    <div class="add-attendance-form">
+                        <h2 class="subtitle">Добавить запись о посещаемости</h2>
+                        <form method="POST" action="{{ url_for('add_attendance') }}">
+                            <div class="form-group">
+                                <label for="kid_name">Имя ребенка:</label>
+                                <input type="text" id="kid_name" name="kid_name" placeholder="Введите имя ребенка" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="date">Дата:</label>
+                                <input type="date" id="date" name="date" required>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="attendance" name="attendance">
+                                    <label for="attendance">Ребенок присутствовал</label>
+                                </div>
+                            </div>
+                            <button type="submit" class="form-button">
+                                Добавить запись
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Таблица посещаемости -->
+                    <div class="journal-container">
+                        <h2 class="subtitle">Записи посещаемости</h2>
+                        <table class="attendance-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Имя ребенка</th>
+                                    <th>Дата</th>
+                                    <th>Статус</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if attendance_list %}
+                                    {% for attendance in attendance_list %}
+                                    <tr>
+                                        <td>{{ attendance.id }}</td>
+                                        <td>{{ attendance.kid }}</td>
+                                        <td>
+                                            {% if attendance.data %}
+                                                {{ attendance.data.strftime('%d.%m.%Y') }}
+                                            {% else %}
+                                                Не указана
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if attendance.attendance %}
+                                                <span class="present">✅ Присутствовал</span>
+                                            {% else %}
+                                                <span class="absent">❌ Отсутствовал</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <a href="{{ url_for('delete_attendance', attendance_id=attendance.id) }}" 
+                                               class="delete-btn"
+                                               onclick="return confirm('Удалить эту запись?')">
+                                                Удалить
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="5" class="no-data">Нет данных о посещаемости</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Установка сегодняшней даты по умолчанию
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').value = today;
+        });
+    </script>
+</body>
+</html>
